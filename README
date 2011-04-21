@@ -1,0 +1,28 @@
+Flot plugin to display angled X-axis tick labels.
+https://github.com/markrcote/flot-tickrotor
+
+Requires flot 0.7 or higher and a browser supporting <canvas>.
+
+To activate, just set xaxis.rotateTicks to an angle in degrees.  Labels are
+rotated clockwise, so if you want the labels to angle up and to the right
+(/) you need to provide an angle > 90.  The text will be flipped so that it
+is still right-side-up.
+
+Angles greater than or equal to 180 are ignored.
+
+If set, xaxis.rotateTicksFont is used for the ticks font.  Otherwise, the
+CSS font property for the tickLabel class is used.  If neither is set, the
+default is 'smaller sans-serif'.
+
+The graph is resized so that all labels can be displayed properly.
+- NOTE: currently this only works with label angle > 90 degrees.
+
+If you are using this with flot-axislabels, include flot-tickrotor *before*
+flot-axislabels, since the former completely redefines the X-axis
+labelHeight, and the latter only modifies it.
+
+TODO
+----
+
+- Fix plot resizing with long labels when angle < 90 degrees.  It seems to
+  require a y2axis at the moment and fails if one isn't defined.
