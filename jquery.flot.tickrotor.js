@@ -98,7 +98,7 @@
 
                 var x;
                 for (var i = 0; i < ticks.length; i++) {
-                  elem = $('<span style="font:' + font + '">' + ticks[i].label + '</div>');
+                  elem = $('<span style="font:' + font + '">' + ticks[i].label + '</span>');
                   plot.getPlaceholder().append(elem);
                   ticks[i].height = elem.outerHeight(true);
                   ticks[i].width = elem.outerWidth(true);
