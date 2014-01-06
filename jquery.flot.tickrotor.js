@@ -26,11 +26,14 @@
         // Therefore, we use a trick where we run the draw routine twice:
         // the first time to get the tick measurements, so that we can change
         // them, and then have it draw it again.
-        var ticks = [];
+
+        var ticks = [];  // preserve between draw() calls.
         var font;
         var secondPass = false;
         var rotateTicks, rotateTicksRads, radsAboveHoriz;
+
         plot.hooks.draw.push(function (plot, ctx) {
+            var xaxis;  // for convenience
             if (!secondPass) {
                 var opts = plot.getAxes().xaxis.options;
                 if (opts.rotateTicks === undefined) {
@@ -59,8 +62,18 @@
 
                 var elem, maxLabelWidth = 0, maxLabelHeight = 0, minX = 0, maxX = 0;
 
-                var xaxis = plot.getAxes().xaxis;
+                // We have to clear the ticks option so that flot core
+                // doesn't draw ticks superimposed with ours, but we preserve
+                // the tick data as xaxis.rotatedTicks so that external code
+                // can still get to it.
+
+                // FIXME: It would obviously be better to just interrupt
+                // the drawing of the ticks and preserve the 'ticks'
+                // property.  That probably requires another hook.
+
+                xaxis = plot.getAxes().xaxis;
                 ticks = plot.getAxes().xaxis.ticks;
+                xaxis.rotatedTicks = ticks;
                 opts.ticks = [];  // we'll make our own
 
                 var x;
@@ -129,7 +142,7 @@
                 if (ticks.length == 0) {
                     return;
                 }
-                var xaxis = plot.getAxes().xaxis;
+                xaxis = plot.getAxes().xaxis;
                 var box = xaxis.box;
                 var tick, label, xoffset, yoffset;
                 for (var i = 0; i < ticks.length; i++) {
