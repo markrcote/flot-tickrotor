@@ -1,49 +1,16 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Version: MPL 1.1/GPL 2.0/LGPL 2.1
- *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- * The Original Code is flot-tickrotor.
- *
- * The Initial Developer of the Original Code is
- * the Mozilla Foundation.
- * Portions created by the Initial Developer are Copyright (C) 2011
- * the Initial Developer. All Rights Reserved.
- *
- * Contributor(s):
- *     Mark Cote <mcote@mozilla.com>
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 2 or later (the "GPL"), or
- * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
- * in which case the provisions of the GPL or the LGPL are applicable instead
- * of those above. If you wish to allow use of your version of this file only
- * under the terms of either the GPL or the LGPL, and not to allow others to
- * use your version of this file under the terms of the MPL, indicate your
- * decision by deleting the provisions above and replace them with the notice
- * and other provisions required by the GPL or the LGPL. If you do not delete
- * the provisions above, a recipient may use your version of this file under
- * the terms of any one of the MPL, the GPL or the LGPL.
- *
- * ***** END LICENSE BLOCK ***** */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /*
  * flot-tickrotor: flot plugin to display angled X-axis tick labels.
- * 
+ *
  * Requires flot 0.7 or higher and a browser supporting <canvas>.
- * 
+ *
  * To activate, just set xaxis.rotateTicks to an angle in degrees.  Labels
- * are rotated clockwise, so if you want the labels to angle up and to the right (/)
- * you need to provide an angle > 90.  The text will be flipped so that it is still
- * right-side-up.
+ * are rotated clockwise, so if you want the labels to angle up and to the
+ * right (/) you need to provide an angle > 90.  The text will be flipped so
+ * that it is still right-side-up.
  * Angles greater than or equal to 180 are ignored.
  */
 (function ($) {
@@ -69,12 +36,12 @@
                 if (opts.rotateTicks === undefined) {
                     return;
                 }
-                
+
                 rotateTicks = parseInt(opts.rotateTicks, 10);
                 if (rotateTicks.toString() != opts.rotateTicks || rotateTicks == 0 || rotateTicks >= 180) {
                     return;
                 }
-                
+
                 rotateTicksRads = rotateTicks * Math.PI/180;
                 if (rotateTicks > 90) {
                     radsAboveHoriz = Math.PI - rotateTicksRads;
@@ -89,7 +56,7 @@
                 if (!font) {
                     font = 'smaller sans-serif';
                 }
-                
+
                 var elem, maxLabelWidth = 0, maxLabelHeight = 0, minX = 0, maxX = 0;
 
                 var xaxis = plot.getAxes().xaxis;
@@ -131,7 +98,7 @@
                       }
                   }
                 }
-                
+
                 // Calculate maximum label height after rotating.
                 if (rotateTicks > 90) {
                     var acuteRads = rotateTicksRads - Math.PI/2;
@@ -143,16 +110,17 @@
                     opts.labelHeight = Math.ceil(Math.sin(rotateTicksRads) * maxLabelWidth)
                                        + Math.ceil(Math.sin(acuteRads) * maxLabelHeight);
                 }
-                
+
                 if (minX < 0) {
                   plot.getAxes().yaxis.options.labelWidth = -1 * minX;
                 }
-                
-                // Doesn't seem to work if there are no values using the second y axis.
+
+                // Doesn't seem to work if there are no values using the
+                // second y axis.
                 //if (maxX > xaxis.box.left + xaxis.box.width) {
                 //  plot.getAxes().y2axis.options.labelWidth = maxX - xaxis.box.left - xaxis.box.width;
                 //}
-                
+
                 // re-draw with new label widths and heights
                 secondPass = true;
                 plot.setupGrid();
@@ -179,14 +147,15 @@
                                       box.top + box.padding + plot.getOptions().grid.labelMargin + yoffset);
                         ctx.rotate(rotateTicksRads);
                     } else {
-                        // We want the text to facing up, so we have to rotate counterclockwise,
-                        // which means the label has to *end* at the center of the tick. 
+                        // We want the text to facing up, so we have to
+                        // rotate counterclockwise, which means the label
+                        // has to *end* at the center of the tick.
                         xoffset = Math.ceil(Math.cos(radsAboveHoriz) * tick.height)
                                   - Math.ceil(Math.cos(radsAboveHoriz) * tick.width);
                         yoffset = Math.ceil(Math.sin(radsAboveHoriz) * tick.width)
                                   + Math.ceil(Math.sin(radsAboveHoriz) * tick.height);
                         ctx.translate(Math.round(plot.getPlotOffset().left + xaxis.p2c(tick.v) + xoffset),
-                                      box.top + box.padding + plot.getOptions().grid.labelMargin + yoffset); 
+                                      box.top + box.padding + plot.getOptions().grid.labelMargin + yoffset);
                         ctx.rotate(-radsAboveHoriz);
                     }
                     ctx.fillText(tick.label, 0, 0);
