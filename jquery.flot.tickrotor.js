@@ -101,7 +101,6 @@
                 labelCSS += 'font-family: ' + font + '; ';
                 canvasFontStyleStr += ' ' + font;
 
-                window.alert(canvasFontStyleStr + "\n" + labelCSS);
                 var elem, maxLabelWidth = 0, maxLabelHeight = 0, minX = 0, maxX = 0;
 
                 // We have to clear the ticks option so that flot core
