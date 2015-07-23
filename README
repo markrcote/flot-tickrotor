@@ -10,9 +10,25 @@ is still right-side-up.
 
 Angles greater than or equal to 180 are ignored.
 
-If set, xaxis.rotateTicksFont is used for the ticks font.  Otherwise, the
-CSS font property for the tickLabel class is used.  If neither is set, the
-default is 'smaller sans-serif'.
+If the standard xaxis.font or yaxis.font settings object is present, that is 
+used for formatting the tick labels.
+Eg:
+xaxis {
+  font: {
+  	size: 12, /* Expressed in pixels */
+  	style: "italic",
+  	weight: "bold",
+  	family: "sans-serif",
+  	variant: "small-caps",
+  	color: "#545454"
+  }
+}
+
+If set, xaxis.rotateTicksFont is used for the ticks font.  This follows the 
+canvas API font style specification format.
+
+Otherwise, the CSS font property for the tickLabel class is used.  If none
+are set, the default is 'smaller sans-serif'.
 
 The graph is resized so that all labels can be displayed properly.
 - NOTE: currently this only works with label angle > 90 degrees.
