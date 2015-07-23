@@ -10,7 +10,7 @@ is still right-side-up.
 
 Angles greater than or equal to 180 are ignored.
 
-If the standard xaxis.font or yaxis.font settings object is present, that is 
+If the standard flot xaxis.font settings object is present, that is 
 used for formatting the tick labels.
 Eg:
 xaxis {
