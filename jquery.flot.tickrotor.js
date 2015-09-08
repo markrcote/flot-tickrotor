@@ -115,14 +115,17 @@
                 // Calculate maximum label height after rotating.
                 if (rotateTicks > 90) {
                     var acuteRads = rotateTicksRads - Math.PI/2;
-                    opts.labelHeight = Math.ceil(Math.sin(acuteRads) * maxLabelWidth)
+                    var rotateLabelHeight = Math.ceil(Math.sin(acuteRads) * maxLabelWidth)
                                        + Math.ceil(Math.sin(acuteRads) * maxLabelHeight);
                 } else {
                     var acuteRads = Math.PI/2 - rotateTicksRads;
                     // Center such that the top of the label is at the center of the tick.
-                    opts.labelHeight = Math.ceil(Math.sin(rotateTicksRads) * maxLabelWidth)
+                    var rotateLabelHeight = Math.ceil(Math.sin(rotateTicksRads) * maxLabelWidth)
                                        + Math.ceil(Math.sin(acuteRads) * maxLabelHeight);
                 }
+
+                // Only use rotateLabelHeight if it's greater than our options labelHeight
+                if(rotateLabelHeight > opts.labelHeight) opts.labelHeight = rotateLabelHeight;
 
                 if (minX < 0) {
                   plot.getAxes().yaxis.options.labelWidth = -1 * minX;
