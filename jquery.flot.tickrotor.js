@@ -78,6 +78,10 @@
 
                 var x;
                 for (var i = 0; i < ticks.length; i++) {
+                  if (ticks[i].v < plot.getAxes().xaxis.min || ticks[i].v > plot.getAxes().xaxis.max) {
+                      continue;
+                  }
+
                   elem = $('<span style="font:' + font + '">' + ticks[i].label + '</span>');
                   plot.getPlaceholder().append(elem);
                   ticks[i].height = elem.outerHeight(true);
