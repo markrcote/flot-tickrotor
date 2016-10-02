@@ -1,4 +1,5 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
@@ -28,7 +29,7 @@
         // them, and then have it draw it again.
 
         var ticks = [];  // preserve between draw() calls.
-        var font;
+        var font = null, size = null, weight = null, color = null, variant = null, fontStyle = null, labelCSS = '', canvasFontStyleStr = '';
         var secondPass = false;
         var rotateTicks, rotateTicksRads, radsAboveHoriz;
 
@@ -52,13 +53,53 @@
                     radsAboveHoriz = Math.PI/2 - rotateTicksRads;
                 }
 
-                font = opts.rotateTicksFont;
+                //Look for standard Flot tick label formatting settings
+                if (opts.font !== undefined) {
+                	if (opts.font.size !== undefined) size = opts.font.size;
+                	if (opts.font.color !== undefined) color = opts.font.color;
+                	if (opts.font.weight !== undefined) weight = opts.font.weight;
+                	if (opts.font.family !== undefined) font = opts.font.family;
+                	if (opts.font.variant !== undefined) variant = opts.font.variant;
+                	if (opts.font.style !== undefined) fontStyle = opts.font.style;
+                }
+
+                //Backwards compatibility with original tickrotaor plugin font face setting
+                if (opts.rotateTicksFont !== undefined) {
+                	font = opts.rotateTicksFont;
+                }
+
+                //Apply defaults for undefined format settings
                 if (!font) {
                     font = $('.tickLabel').css('font');
                 }
                 if (!font) {
                     font = 'smaller sans-serif';
                 }
+
+                //Build CSS style string and canvas API font style string
+                //The order elements are appended to canvasFontStyleStr is important as the canvas API makes assumptions about order.
+                if(color){
+                	labelCSS += 'color: ' + color + '; ';
+                	//canvasFontStyleStr += ' ' + color; //Not supported here. See ctx.fileStyle below.
+                }
+                if(weight){
+                	labelCSS += 'font-weight: ' + weight + '; ';
+                	canvasFontStyleStr += ' ' + weight;
+                }
+                if(variant){
+                	labelCSS += 'font-variant: ' + variant + '; ';
+                	canvasFontStyleStr += ' ' + variant;
+                }
+                if(fontStyle){
+                	labelCSS += 'font-style: ' + fontStyle + '; ';
+                	canvasFontStyleStr += ' ' + fontStyle;
+                }
+                if(size){
+                	labelCSS += 'font-size: ' + size + 'px; ';
+                	canvasFontStyleStr += ' ' + size + 'px';
+                }
+                labelCSS += 'font-family: ' + font + '; ';
+                canvasFontStyleStr += ' ' + font;
 
                 var elem, maxLabelWidth = 0, maxLabelHeight = 0, minX = 0, maxX = 0;
 
@@ -78,7 +119,7 @@
 
                 var x;
                 for (var i = 0; i < ticks.length; i++) {
-                  elem = $('<span style="font:' + font + '">' + ticks[i].label + '</span>');
+                  elem = $('<span style="' + labelCSS + '">' + ticks[i].label + '</span>');
                   plot.getPlaceholder().append(elem);
                   ticks[i].height = elem.outerHeight(true);
                   ticks[i].width = elem.outerWidth(true);
@@ -151,7 +192,10 @@
                         continue;
                     }
                     ctx.save();
-                    ctx.font = font;
+
+                    ctx.font = canvasFontStyleStr;
+            		ctx.fillStyle = color;
+
                     if (rotateTicks <= 90) {
                         // Center such that the top of the label is at the center of the tick.
                         xoffset = Math.ceil(Math.cos(radsAboveHoriz) * tick.height/2);
