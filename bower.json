@@ -1,0 +1,17 @@
+{
+  "name": "flot-tickrotor",
+  "authors": [
+    "@markrcote", "@mnofresno"
+  ],
+  "description": "Flot plugin for rotating the ticks",
+  "main": "jquery.flot.tickrotor.js",
+  "license": "MIT",
+  "homepage": "https://github.com/markrcote/flot-tickrotor",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
