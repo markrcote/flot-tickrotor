@@ -27,7 +27,7 @@
         // the first time to get the tick measurements, so that we can change
         // them, and then have it draw it again.
 
-        var ticks = [];  // preserve between draw() calls.
+        var ticks = null;  // preserve between draw() calls.
         var font;
         var secondPass = false;
         var rotateTicks, rotateTicksRads, radsAboveHoriz;
@@ -72,7 +72,7 @@
                 // property.  That probably requires another hook.
 
                 xaxis = plot.getAxes().xaxis;
-                ticks = plot.getAxes().xaxis.ticks;
+                ticks = xaxis.ticks ? xaxis.ticks : [];
                 xaxis.rotatedTicks = ticks;
                 opts.ticks = [];  // we'll make our own
 
